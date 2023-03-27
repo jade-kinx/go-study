@@ -1,7 +1,7 @@
 # 키워드/연산자/내장함수
 ## 키워드
-GO 언어의 키워드는 모두 25개 (참고: https://go.dev/ref/spec#Keywords)  
-C++(17)의 키워드는 84개, C#의 키워드는 80개 이상
+* GO 언어의 키워드는 모두 25개 (참고: https://go.dev/ref/spec#Keywords)  
+* C++(17)의 키워드는 84개, C#의 키워드는 80개 이상
 
 ```
 break        default      func         interface    select
@@ -74,3 +74,14 @@ continue     for          import       return       var
 | delete(m, k) | remove element m[k] from map m ||
 | complex, real, img | complex 타입의 객체 생성, 소수부, 지수부 반환 ||
 | panic, recover | 런타임 오류 발생, 런타임 오류 복구 ||
+
+
+## 내장인터페이스
+
+```go
+// The error built-in interface type is the conventional interface for
+// representing an error condition, with the nil value representing no error.
+type error interface {
+	Error() string
+}
+```
