@@ -119,11 +119,11 @@ type SliceHeader struct {
 ### 배열과 슬라이스의 메모리 공간 할당
 ```go
 	// 배열
-	arr1 := [5]int{1, 2, 3, 4, 5}
-	arr2 := arr1 // 배열의 복사(DeepCopy) (arr1, arr2는 다른 공간을 가리킴)
-	arr2[0] = 100
-	fmt.Println(arr1)
-	fmt.Println(arr2)
+    arr1 := [5]int{1, 2, 3, 4, 5}
+    arr2 := arr1 // 배열의 복사(DeepCopy) (arr1, arr2는 다른 공간을 가리킴)
+    arr2[0] = 100
+    fmt.Println(arr1)
+    fmt.Println(arr2)
     /* OUTPUT
     [1 2 3 4 5]
     [100 2 3 4 5]
