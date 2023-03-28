@@ -82,9 +82,6 @@ func main() {
 }
 ```
 
-## 오버플로우와 언더플로우
-- not ready yet
-
 ## 배열
 * 배열(array)은 같은 타입을 가지는 변수들의 집합이며, 연속된 메모리 공간에 할당  
 * zero-based index로 접근 
