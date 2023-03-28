@@ -15,7 +15,7 @@ func Sum(a int, b int) int {
   
 ## Pass-By-Value or Pass-By-Reference?
 * Golang에서는 기본적으로 모든 타입에 대해 `Pass-By-Value`  
-* `Pass-By-Value`는 메모리 복사가 발생하므로, `Pass-By-Reference` 형태로 사용하기 위해서 `Pointer`를 전달
+* `Pass-By-Value`는 메모리 복사가 발생, `Pass-By-Reference` 형태로 사용하기 위해서는 `Pointer`를 전달
 
 ```go
 func IncrementValue(a int) {
@@ -67,6 +67,7 @@ func main() {
 ## 함수 리턴 구문과 지연 실행
 ```go
 // 다중 리턴 구문
+// C#의 튜플과 비슷한듯 다름
 func divide(a, b int) (c int, err error) {
     if b == 0 {
         err = fmt.Errorf("`%d` can't divide by 0", a)
@@ -103,7 +104,6 @@ func main() {
 
 
 ## 함수리터럴(익명함수/람다)
-* not ready yet
 
 ```go
 // 의존성 주입(dependency injection)
