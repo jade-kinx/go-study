@@ -1,16 +1,21 @@
-# 제너릭
+package main
 
-* Go v1.18 부터 지원  
-* v1.18 이전에는 빈 인터페이스`interface{}`를 이용하여 제너릭처럼 사용했지만, `boxing/unboxing` 과정에서 번거로움과 성능 저하 발생  
-* Go의 제너릭 타입은 `함수`와 `구조체`에서 사용 가능하고, `메소드`에서는 아직 미지원  
-  * 구조체에 정의된 타입 T는 메소드에서 사용 가능하지만, 메소드에서 새로운 타입 U를 정의하여 사용할 수 없음  
-
-```go
 import (
 	"crypto/rand"
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"reflect"
+
+	"github.com/google/uuid"
+)
+
+const (
+	Alphabet     = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	Numeric      = "0123456789"
+	AlphaNumeric = Alphabet + Numeric
+	Hex          = Numeric + "abcdef"
+	FileName     = Alphabet + Numeric + ".-_" // POSIX FILENAME
 )
 
 // NextBytes 주어진 길이 만큼의 랜덤 바이트 슬라이스를 반환
@@ -20,7 +25,30 @@ func NextBytes(length int) (b []byte) {
 	return
 }
 
-// number type 타입 제한자
+// NextString length 길이의 임의의 문자열(characterset 문자중)을 반환한다.
+// 단, Hex 타입의 경우, 주어진 길이*2 만큼의 문자열이 반환된다. 예: NextString(Hex, 4) = "ffffffff" (4바이트 hex string)
+func NextString(characterset string, length int) (ret string) {
+	// hex string? (seperated for performance)
+	if characterset == Hex {
+		// ret = hex.EncodeToString(NextBytes(length))[:length]
+		ret = hex.EncodeToString(NextBytes(length))
+		return
+	}
+
+	// character set length
+	max := len(characterset)
+	for i := 0; i < length; i++ {
+		ret += string(characterset[NextInRange(0, max)])
+	}
+	return
+}
+
+// NextUUID 랜덤 UUID를 반환
+func NextUUID() string {
+	return uuid.NewString()
+}
+
+// number type
 type number interface {
 	~int8 | ~int16 | ~int32 | ~int64 | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~int | ~uint
 }
@@ -64,4 +92,3 @@ func NextInRange[T number](min, max T) T {
 	}
 	return min + n
 }
-```
