@@ -115,48 +115,48 @@ type SliceHeader struct {
 
 ### 배열과 슬라이스의 메모리 공간 할당
 ```go
-	// 배열
-    arr1 := [5]int{1, 2, 3, 4, 5}
-    arr2 := arr1 // 배열의 복사(DeepCopy) (arr1, arr2는 다른 공간을 가리킴)
-    arr2[0] = 100
-    fmt.Println(arr1)
-    fmt.Println(arr2)
-    /* OUTPUT
-    [1 2 3 4 5]
-    [100 2 3 4 5]
-    */
+// 배열
+arr1 := [5]int{1, 2, 3, 4, 5}
+arr2 := arr1 // 배열의 복사(DeepCopy) (arr1, arr2는 다른 공간을 가리킴)
+arr2[0] = 100
+fmt.Println(arr1)
+fmt.Println(arr2)
+/* OUTPUT
+[1 2 3 4 5]
+[100 2 3 4 5]
+*/
 
-	// 슬라이스
-	slice1 := []int{1, 2, 3, 4, 5}
-	slice2 := slice1 // 헤더만 복사(ShallowCopy)(slice1, slice2는 동일한 공간을 가리킴)
-	slice2[0] = 100
-	fmt.Println(slice1)
-	fmt.Println(slice2)
-    /* OUTPUT
-    [100 2 3 4 5]
-    [100 2 3 4 5]
-    */
+// 슬라이스
+slice1 := []int{1, 2, 3, 4, 5}
+slice2 := slice1 // 헤더만 복사(ShallowCopy)(slice1, slice2는 동일한 공간을 가리킴)
+slice2[0] = 100
+fmt.Println(slice1)
+fmt.Println(slice2)
+/* OUTPUT
+[100 2 3 4 5]
+[100 2 3 4 5]
+*/
 ```
 
 ### 슬라이싱과 구조분해할당(javascript)
 ```go
-    // 슬라이싱: 배열 또는 슬라이스에서 일부를 잘라내 슬라이스로 만드는 것
-    arr := [5]int{1, 2, 3, 4, 5}
-    slice := arr[4:5]
-    slice = append(slice, 10, 15, 20, 25)
-    fmt.Println(arr)
-    fmt.Println(slice)
-    /* OUTPUT
-    [1 2 3 4 5]
-    [5 10 15 20 25]
-    */
+// 슬라이싱: 배열 또는 슬라이스에서 일부를 잘라내 슬라이스로 만드는 것
+arr := [5]int{1, 2, 3, 4, 5}
+slice := arr[4:5]
+slice = append(slice, 10, 15, 20, 25)
+fmt.Println(arr)
+fmt.Println(slice)
+/* OUTPUT
+[1 2 3 4 5]
+[5 10 15 20 25]
+*/
 
-    // 구조분해할당
-    slice2 := append(slice, arr[1:]...) // ... => 전개연산자(spread operator)
-    fmt.Println(slice2)
-    /* OUTPUT
-    [5 10 15 20 25 2 3 4 5]
-    */
+// 구조분해할당
+slice2 := append(slice, arr[1:]...) // ... => 전개연산자(spread operator)
+fmt.Println(slice2)
+/* OUTPUT
+[5 10 15 20 25 2 3 4 5]
+*/
 ```
 
 ## 문자열
