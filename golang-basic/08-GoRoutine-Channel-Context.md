@@ -89,7 +89,51 @@ func main() {
 * 고루틴간 흐름을 제어할 수 있도록 한다.  
 * `select` 키워드로 채널들을 바인딩하여 기아 상태를 예방  
 
-[/golang-basic/examples/ex8/mutex_test.go](https://github.com/jade-kinx/go-study/blob/main/golang-basic/examples/ex8/mutex_test.go) 참고
+채널의 구현 샘플 참고: [/golang-basic/examples/ex8/mutex_test.go](https://github.com/jade-kinx/go-study/blob/main/golang-basic/examples/ex8/mutex_test.go)
+
+채널의 기본적인 사용법
+```go
+func ChannelBasicUsage() {
+	channel := make(chan string) // 채널
+
+	// 채널 송신자 N
+	wgs := sync.WaitGroup{}
+	for i := 0; i < runtime.NumCPU(); i++ {
+		wgs.Add(1)
+		go func(ch chan<- string, sender int) { // write-only 채널
+			defer fmt.Printf("sender[%d] terminated\n", sender)
+			defer wgs.Done()
+			for i := 0; i < 10; i++ {
+				time.Sleep(time.Second * 1)
+				// 채널에 메세지 입력
+				ch <- fmt.Sprintf("sender[%d]: Hello, Go! (%d)", sender, i)
+			}
+		}(channel, i)
+	}
+
+	// 채널 수신자 1
+	wgr := sync.WaitGroup{}
+	wgr.Add(1)
+	go func(ch <-chan string) { // read-only 채널
+		defer fmt.Println("receiver terminated")
+		defer wgr.Done()
+		// 채널에서 메세지를 수신 ( 채널이 닫히면 for loop 종료)
+		for msg := range ch {
+			fmt.Println(msg)
+		}
+	}(channel)
+
+	// wait for channel senders
+	wgs.Wait()
+
+	// close channel
+	close(channel)
+
+	// wait for channel receiver
+	wgr.Wait()
+}
+```
+
 
 ## 컨텍스트
 * 컨텍스트는 스레드(또는 고루틴) 마다 가지는 고유의 개별 데이터  
