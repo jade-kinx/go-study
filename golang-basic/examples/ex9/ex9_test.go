@@ -44,7 +44,7 @@ func SumToN(n int) (int, error) {
 
 	// f(n) = n * (n + 1) / 2
 	v := big.NewInt(0)
-	v = v.Mul(big.NewInt(int64(n)), big.NewInt(int64(n+1)))
+	v = v.Mul(big.NewInt(int64(n)), big.NewInt(int64(n)+1))
 	v = v.Div(v, big.NewInt(2))
 
 	// sum overflow?

@@ -36,7 +36,7 @@ func (c *Channel[T]) unlock() {
 
 // 채널에서 데이터를 팝
 // o <- ch
-func (c *Channel[T]) pop() (o T, ok bool) {
+func (c *Channel[T]) TryPop() (o T, ok bool) {
 	c.lock()
 	defer c.unlock()
 
@@ -51,7 +51,7 @@ func (c *Channel[T]) pop() (o T, ok bool) {
 
 // 채널에 데이터를 푸시
 // ch <- o
-func (c *Channel[T]) push(o T) bool {
+func (c *Channel[T]) TryPush(o T) bool {
 	c.lock()
 	defer c.unlock()
 
@@ -80,7 +80,7 @@ func (c *Channel[T]) IsEmpty() bool {
 // ch <- o
 func (c *Channel[T]) Push(o T) {
 	for {
-		if ok := c.push(o); ok {
+		if ok := c.TryPush(o); ok {
 			return
 		}
 		// wait for channel ready (busy-waiting)
@@ -93,7 +93,7 @@ func (c *Channel[T]) Push(o T) {
 func (c *Channel[T]) Pop() (o T) {
 	for {
 		// data found on channel?
-		if o, ok := c.pop(); ok {
+		if o, ok := c.TryPop(); ok {
 			return o
 		}
 		// wait for data (busy-waiting)
@@ -102,7 +102,7 @@ func (c *Channel[T]) Pop() (o T) {
 }
 
 // 데드락이 발생하는 팝
-func (c *Channel[T]) popForDeadLock() (o T, ok bool) {
+func (c *Channel[T]) TryPopForDeadLock() (o T, ok bool) {
 	c.lock()
 	defer c.unlock()
 
@@ -117,7 +117,7 @@ func (c *Channel[T]) popForDeadLock() (o T, ok bool) {
 
 // 동기화 문제가 발생하는 팝
 // 이중 잠금 문제는 수정했지만, (1)내부와 (3)에서의 버퍼의 상태(갯수)가 다를 수 있다!
-func (c *Channel[T]) popForConcurrentNotSafe() (o T, ok bool) {
+func (c *Channel[T]) TryPopForConcurrentNotSafe() (o T, ok bool) {
 	if !c.IsEmpty() { // (1): 버퍼의 크기 > 0
 		c.lock()   // (2): 다른 고루틴에 제어권 넘어갈 수 있음
 		o = c.q[0] // (3): 버퍼의 크기 == 0 일수도 있음(패닉)

@@ -114,7 +114,7 @@ ok  	ex9	0.031s
 ```go
 func BenchmarkSumToN(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		SumToN(n)	// b.N이 테스트에 관여하면 안됨
+		SumToN(n)	// 원래는 b.N이 테스트에 관여하면 안됨
 	}
 }
 ```
@@ -141,6 +141,7 @@ func SumToN(n int) (int, error) {
 	if n < 0 {
 		return 0, fmt.Errorf("n(%d) should be greater or equal than 0", n)
 	}
+	// f(n) = n * (n + 1) / 2
 	return n * (n + 1) / 2, nil
 }
 ```
@@ -200,7 +201,7 @@ func SumToN(n int) (int, error) {
 
 	// f(n) = n * (n + 1) / 2
 	v := big.NewInt(0)
-	v = v.Mul(big.NewInt(int64(n)), big.NewInt(int64(n+1)))
+	v = v.Mul(big.NewInt(int64(n)), big.NewInt(int64(n)+1))
 	v = v.Div(v, big.NewInt(2))
 
 	// overflow?
@@ -235,5 +236,5 @@ ok  	ex9	1.139s
 ```
 
 ### 그 외
-* 가급적이면 입력 범위의 모든 경우를 테스트 케이스로 작성하는 것이 좋지만, 시간이 오래 걸리므로 적절히 트레이드 오프가 필요
-* 내 코드에 대한 신뢰성 확보가 문제 발생시 동료의 코드에 대한 의심으로 번지면 안됨!
+* 가급적이면 입력 범위의 모든 경우를 테스트 케이스로 작성하는 것이 좋지만, 시간이 오래 걸리므로 적절히 트레이드 오프가 필요(주로 엣지 테스트)  
+* 내 코드에 대한 신뢰성 확보가 문제 발생시 동료의 코드에 대한 의심으로 번지면 안됨!  

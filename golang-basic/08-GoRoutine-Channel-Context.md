@@ -29,11 +29,12 @@ func main() {
 ```
 
 ### 멀티스레딩 환경에서의 동시성 문제
-* 원자성(atomic operation)
-* 데드락/라이브락/기아상태
+* 과거의 게임 서버들이 걸핏하면 뻗던 문제가 대부분 동기화 처리 문제  
+* 원자성/데드락/라이브락/기아상태
+* Golang에서는 기아상태 문제로 select 키워드의 순서를 균등 분포 확률로 처리  
 * 심도 있게 다루어야 하는 주제  
 
-동기화의 필요성
+동기화의 필요성 (크리티컬 섹션/상호 배제)
 ```go
 func main() {
     var data int
@@ -86,6 +87,7 @@ func main() {
 ## 채널
 * 채널은 동기화 기능(concurrent-safe)을 제공하는 메세지 큐  
 * 고루틴간 흐름을 제어할 수 있도록 한다.  
+* `select` 키워드로 채널들을 바인딩하여 기아 상태를 예방  
 
 [/golang-basic/examples/ex8/mutex_test.go](https://github.com/jade-kinx/go-study/blob/main/golang-basic/examples/ex8/mutex_test.go) 참고
 
