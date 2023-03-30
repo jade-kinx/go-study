@@ -122,7 +122,9 @@ func (c *Channel[T]) TryPopForConcurrentNotSafe() (o T, ok bool) {
 		c.lock()   // (2): 다른 고루틴에 제어권 넘어갈 수 있음
 		o = c.q[0] // (3): 버퍼의 크기 == 0 일수도 있음(패닉)
 		c.q = c.q[1:]
-		c.unlock()
+		c.unlock() // !!(4): c.unlock()을 해주기 전에 panic이 발생하고 콜스택의 상단에서 복구되면,
+		// 해당 뮤텍스 자원은 여전히 락이 걸려있는 상태가 되어, 이후 다시 락 진입시 데드락 발생!
+		// 따라서, sync.mutex.Unlock() 메소드는 가급적이면 defer 지연 함수와 함께 사용하는 것을 권장
 		return o, true
 	}
 	return o, false
