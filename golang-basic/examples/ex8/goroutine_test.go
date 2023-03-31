@@ -6,8 +6,9 @@ import (
 )
 
 func TestGoRoutineConcurrentNotSafe(t *testing.T) {
+	noop := func() bool { time.Sleep(0); return true }
 
-	// timeout 10 seconds
+	// timeout for 10 seconds
 	done := false
 	go func() {
 		<-time.After(time.Second * 10)
@@ -15,13 +16,10 @@ func TestGoRoutineConcurrentNotSafe(t *testing.T) {
 	}()
 
 	for !done {
-		zero := 0
-		go func() { zero++ }()
-		if zero == 0 {
-			time.Sleep(time.Millisecond * 10) // sleep 10ms
-			if zero != 0 {
-				panic("zero is not 0")
-			}
+		data := 0
+		go func() { data++ }()
+		if data == 0 && noop() && data != 0 {
+			panic("wtf! data is zero or not?")
 		}
 	}
 }

@@ -48,10 +48,10 @@ func main() {
     // ...
 }
 
-// if data == 0 {} 내부의 data가 0가 아님을 알 수 있는 테스트 코드
 func TestGoRoutineConcurrentNotSafe(t *testing.T) {
+	noop := func() bool { time.Sleep(0); return true }
 
-	// timeout 10 seconds
+	// timeout for 10 seconds
 	done := false
 	go func() {
 		<-time.After(time.Second * 10)
@@ -59,13 +59,10 @@ func TestGoRoutineConcurrentNotSafe(t *testing.T) {
 	}()
 
 	for !done {
-		zero := 0
-		go func() { zero++ }()
-		if zero == 0 {  // (1): zero의 값이 0이라고 비교하고 들어왔는데
-			time.Sleep(time.Millisecond * 10) // sleep 10ms
-			if zero != 0 {  // (2): zero가 0이 아니라고? 아니 이게 무슨소리야?
-				panic("zero is not 0")
-			}
+		data := 0
+		go func() { data++ }()
+		if data == 0 && noop() && data != 0 {
+			panic("wtf! data is zero or not?")
 		}
 	}
 }
