@@ -2,7 +2,6 @@
 
 [![Monty Hall Problem](http://img.youtube.com/vi/AXB6r-hjsig/0.jpg)](https://www.youtube.com/watch?v=AXB6r-hjsig?t=0s)
 
-
 몬티 홀(Monty Hall)이라는 캐나다-미국 TV 프로그램 사회자가 진행하던 미국 오락 프로그램 `《Let's Make a Deal》`에서 유래한 `확률` 문제. 아래의 원문은 해당 칼럼에 실린 문제를 그대로 가져온 것이며, 상품의 종류 등의 디테일은 문제에 따라 조금씩 바뀌지만 당연히 수학적인 의미는 동일하다.  
 
 > Suppose you’re on a game show, and you’re given the choice of three doors. Behind one door is a car, behind the others, goats. You pick a door, say #1, and the host, who knows what’s behind the doors, opens another door, say #3, which has a goat. He says to you, "Do you want to pick door #2?" Is it to your advantage to switch your choice of doors?

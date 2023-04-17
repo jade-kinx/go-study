@@ -21,11 +21,12 @@ type Player interface {
 	Wins() int                // 당첨 횟수
 }
 
-// 플레이어
+// 플레이어(대화형)
 type player struct {
 	wins int // 당첨 횟수
 }
 
+// 3개의 문중 하나의 문을 선택한다.
 func (p player) PickDoor() int {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("pick door(1/2/3) ")
@@ -49,6 +50,7 @@ func (p player) PickDoor() int {
 	return choice
 }
 
+// 진행자가 선택을 바꿀지 물어봤을 때의 대답
 func (p player) SwitchChoice() bool {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("change your mind? (y/n) ")
@@ -68,10 +70,12 @@ func (p player) SwitchChoice() bool {
 	}
 }
 
+// 당첨 횟수
 func (p player) Wins() int {
 	return p.wins
 }
 
+// 당첨 카운터
 func (p *player) ProcessWinOrNot(win bool) {
 	if win {
 		p.wins++
@@ -88,9 +92,8 @@ func (p player1) PickDoor() int {
 	return pickDoor()
 }
 
-// 항상 선택을 유지
 func (p player1) SwitchChoice() bool {
-	return false
+	return false // 항상 선택을 유지
 }
 
 func (p player1) Wins() int {
@@ -110,9 +113,8 @@ func (p player2) PickDoor() int {
 	return pickDoor()
 }
 
-// 항상 선택을 바꾼다
 func (p player2) SwitchChoice() bool {
-	return true
+	return true // 항상 선택을 바꾼다
 }
 
 func (p player2) Wins() int {
@@ -143,7 +145,7 @@ func pickDoor() int {
 	return 1 + rand.Intn(DoorCount)
 }
 
-// 사회자가 플레이어가 선택한 문 또는 당첨이 아닌 문을 연다.
+// 사회자가 플레이어가 염소가 있는 문을 연다.
 func (mh MontyHall) Preview() int {
 	n := pickDoor()
 	for mh.doors[n] || n == mh.pick {
@@ -170,17 +172,16 @@ func (mh MontyHall) SwitchDoor(preview int) int {
 // 몬티홀 문제에 대해 repeats횟수만큼 시행하여,
 // 선택을 바꿨을 때와 바꾸지 않았을 때의 당첨 확률을 구해서 출력한다.
 func main() {
-
 	fmt.Println("Hello, Monty-Hall Problem!")
 	defer fmt.Println("Bye, Monty-Hall Problem!")
 
 	// 사용자 플레이어
-	players := []Player{&player{}}
-	repeats := 10
+	// players := []Player{&player{}}
+	// repeats := 10
 
 	// players (player1은 항상 선택을 유지, player2는 항상 선택을 바꾼다)
-	// players := []Player{&player1{}, &player2{}}
-	// repeats := 10000000
+	players := []Player{&player1{}, &player2{}}
+	repeats := 10000000
 
 	// repeats 횟수 만큼 반복 시행
 	for i := 0; i < repeats; i++ {
@@ -196,7 +197,7 @@ func main() {
 			// 2. 사회자가 미리보기 문을 열어준다.
 			preview := mh.Preview()
 
-			// 3. 선택을 바꿀까?
+			// 3. 선택을 바꿀지 물어본다.
 			if p.SwitchChoice() {
 				mh.pick = mh.SwitchDoor(preview)
 			}

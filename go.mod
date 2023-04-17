@@ -1,9 +1,10 @@
-module github.com/jade-kinx/go-study/golang-basic/examples
+module gostudy
 
 go 1.20
 
 require (
 	github.com/google/uuid v1.3.0
+	github.com/jade-kinx/go-study/golang-basic/examples v0.0.0-20230417025316-86c13daf57ea
 	github.com/stretchr/testify v1.8.2
 )
 
