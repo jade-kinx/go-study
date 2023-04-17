@@ -16,6 +16,8 @@
 * 참가자가 문 하나를 고르면, 사회자는 남은 2가지 문 중에 하나를 열고 그게 '꽝'이라는 사실을 밝힌다.
 * 여기서 참가자에게 다른 문으로 바꿀 수 있는 기회가 주어진다.
 
+<img src="./monty-hall.jpg" width="100%" title="Monty Hall Problem" />
+
 원문: [Monty Hall Problem](https://namu.wiki/w/%EB%AA%AC%ED%8B%B0%20%ED%99%80%20%EB%AC%B8%EC%A0%9C)
 
 증명: [let's proove it](./main.go)
