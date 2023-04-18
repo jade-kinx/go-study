@@ -26,6 +26,12 @@ func NewChannel[T any](cap int) *PriorityChannel[T] {
 	return &PriorityChannel[T]{cap: cap}
 }
 
+/*
+*******************************************************************************
+sync.Mutex 등 copylock이 걸린 오브젝트를 가지는 구조체의 리시버는 반드시 포인터 타입
+엄밀히는 sync.Locker interface를 구현하는 오브젝트. (compile warning)
+********************************************************************************
+*/
 func (c *PriorityChannel[T]) SetTick(tick time.Duration) {
 	c.tick = tick
 }

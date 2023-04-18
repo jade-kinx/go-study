@@ -12,15 +12,14 @@
 | 우선순위 큐 | 우선순위 순으로 처리하되, 우선순위가 같으면 선입선출 |
 
 * 우선순위 큐는 큐 자료 구조에서 필요에 의해 우선순위 개념을 추가한 것으로, 필요하다면 우선순위 스택을 만들 수도 있다.  
-
+* 오늘 내용은 우선순위 큐 그 자체보다, 자료 구조를 목적에 맞게 확장하는 것이 주된 목표임 (`concurrent-safe` 등)
 
 ### 우선순위 큐의 활용
 * 작업 스케쥴링(CPU, Thread, Task, co-routine 등)
 * 네트워크 QoS(Quality of Service), OOB 등
 * 트랜잭션(DB, BlockChain 등) 처리 순서 조정 등
 * API 요청(http request)에 대해 우선순위 부여하여 처리 등
-* 큐의 구조를 갖되 우선 처리를 요하는 모든 작업(은행/마트 등 대기시간)
-
+* 큐의 구조를 갖되 우선 처리를 요하는 모든 작업(은행/마트 등 대기시간, 파일크기 등)
 
 ### 구현 방식에 따른 시간복잡도(BigO 표기법)
 
@@ -44,7 +43,7 @@
 | size(len) | 우선순위 큐에 보관되어 있는 원소의 수를 반환한다 |
 | empty | (optional) 우선순위 큐가 비어있는지 확인한다 |
 
-## Go 채널을 이용한 우선순위 큐의 구현
+## Go 채널을 이용한 간단한 우선순위 큐의 구현
 
 ```go
 // 2개의 채널로 우선순위를 구분하여 높은 우선순위의 채널을 먼저 읽는다.
@@ -66,7 +65,9 @@ func SelectWithPriority(highChan <-chan int, lowChan <-chan int) int {
 * High-Priority, Normal-Priority, Low-Priority 3개의 우선순위를 갖는 경우?
 * 우선순위 항목이 가변적인 경우? (대기시간, 파일크기 등)
 * Go 채널만으로는 우선순위 큐를 구현하기 적합하지 않다.(채널은 기본적으로 순서를 보장)  
-* 일반적인 큐에 우선순위 처리 로직을 더하고, `concurrent-safe` 처리를 해주면 `우선순위 채널`을 만들 수 있지 않을까?  
+* 일반적인 큐에 우선순위 처리 로직을 더하고(우선순위 정렬), `concurrent-safe` 처리를 해주면 `우선순위 채널`을 만들 수 있지 않을까?  
+* ~~Go의 채널은 `concurrent-safe`가 어려운 이들에게 간단하고 안전하게 사용하라고 만들어 준 `built-in concurrent-safe queue`라는 느낌~~
+
 
 ## Go의 heap 컨테이너를 이용한 우선순위 큐
 
@@ -367,6 +368,12 @@ func NewChannel[T any](cap int) *PriorityChannel[T] {
 	return &PriorityChannel[T]{cap: cap}
 }
 
+/*
+*******************************************************************************
+sync.Mutex 등 copylock이 걸린 오브젝트를 가지는 구조체의 리시버는 반드시 포인터 타입
+엄밀히는 sync.Locker interface를 구현하는 오브젝트. (compile warning)
+********************************************************************************
+*/
 func (c *PriorityChannel[T]) SetTick(tick time.Duration) {
 	c.tick = tick
 }
@@ -624,11 +631,10 @@ func TestPriorityChannelIsConcurrentSafe(t *testing.T) {
 
 ### 추가적으로 해볼만 한 작업들
 * `heap`을 이용한 구현(성능 개선)
+  * `heap`의 직접 구현을 포함한...(학습의 측면에서)
 * 이미 포함된 원소의 우선순위 변경
-* 원소의 삭제
+* 이미 포함된 원소의 삭제(작업 취소)
 * 양방향(우선순위) 출력
 * `queue`, `stack`, `map`, `list` 등의 자료 구조를 `concurrent-safe`하게 만들기  
-
-
-
+  * 다만, `Go`에서 `mutex`를 직접 핸들링 하기에는 다소 조심해야 할 부분이 많음
 
