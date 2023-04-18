@@ -64,7 +64,7 @@ func TestPriorityChannelIsConcurrentSafe(t *testing.T) {
 	pc := NewChannel[time.Time](1000)
 
 	wg := sync.WaitGroup{}
-	workers := runtime.NumCPU() * 2
+	workers := runtime.NumCPU() * 2 // concurrent-safe 검출을 쉽게하기 위함
 	runtime.GOMAXPROCS(workers)
 
 	// timeout trigger

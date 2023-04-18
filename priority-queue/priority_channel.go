@@ -59,7 +59,7 @@ func (c *PriorityChannel[T]) rUnlock() {
 // 읽기락/읽기언락은 여기서는 굳이 필요없지만, read/write lock에 대해서 설명하기 위함
 //////////////////////////////////////////////////////////////////////////////////
 
-// 채널의 현재 버퍼 카운트
+// 채널의 현재 원소 갯수
 func (c *PriorityChannel[T]) Count() int {
 	c.rLock()
 	defer c.rUnlock()
@@ -98,8 +98,9 @@ func (c *PriorityChannel[T]) TryPush(data T, priority int) bool {
 	// 새로운 아이템
 	item := element[T]{data: data, priority: priority}
 
+	/////////////////////////////////////////
 	// 새 아이템을 우선순위 위치에 추가
-	// heap을 이용하는 편이 좋다
+	// heap을 이용하는 편이 성능상 우수하다
 	at := c.find(priority)
 	if len(c.q) == at {
 		c.q = append(c.q, item)
@@ -150,7 +151,7 @@ func (c *PriorityChannel[T]) Pop() (data T, err error) {
 	return data, nil
 }
 
-// 채널에서 데이터, 우선순위를 팝(데이터 있을때 까지 대기)
+// 채널에서 데이터를 우선순위와 함께 팝(데이터 있을때 까지 대기)
 func (c *PriorityChannel[T]) PopWithPriority() (data T, priority int, err error) {
 	for {
 		// channel closed?
