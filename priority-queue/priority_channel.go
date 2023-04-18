@@ -174,3 +174,20 @@ func (c *PriorityChannel[T]) PopWithPriority() (data T, priority int, err error)
 		time.Sleep(c.tick)
 	}
 }
+
+func (c *PriorityChannel[T]) Enque(data T, priority int) error {
+	ok := c.TryPush(data, priority)
+	if !ok {
+		return fmt.Errorf("q is not ready")
+	}
+
+	return nil
+}
+
+func (c *PriorityChannel[T]) Deque() (data T, err error) {
+	if item, ok := c.TryPop(); ok {
+		return item.data, nil
+	}
+
+	return data, fmt.Errorf("q is empty")
+}
