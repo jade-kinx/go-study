@@ -108,7 +108,7 @@ func main() {
 * 고루틴간 흐름을 제어할 수 있도록 한다.  
 * `select` 키워드로 채널들을 바인딩하여 기아 상태를 예방  
 
-채널의 구현 샘플 참고: [/golang-basic/examples/ex8/mutex_test.go](https://github.com/jade-kinx/go-study/blob/main/golang-basic/examples/ex8/mutex_test.go)
+채널의 구현 샘플 참고: [/golang-basic/examples/ex8/channel.go](https://github.com/jade-kinx/go-study/blob/main/golang-basic/examples/ex8/channel.go)
 
 채널의 기본적인 사용법
 ```go
